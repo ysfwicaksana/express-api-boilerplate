@@ -1,0 +1,6 @@
+{
+  "ext": "js",
+  "verbose": true,
+  "ignore": ["node_modules"],
+  "restarable": "rs"
+}
