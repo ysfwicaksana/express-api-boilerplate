@@ -1,15 +1,17 @@
 const express = require("express");
 const api = express.Router();
-const dotenv = require("dotenv");
-dotenv.config();
+
+//call validator
+const validate = require("../helpers/validation");
 
 //call controllers
-const UserController = require("../controllers/UserController");
+const userController = require("../controllers/UserController");
 
-api.get("/", UserController.listUser);
+//call validation rules
+const { loginValidation, registerValidation } = require("../validators/user");
 
-// api.get("/", (req, res) => {
-//   res.status(200).json({ data: process.env.APP_NAME });
-// });
+api.get("/", userController.index);
+api.post("/login", loginValidation(), validate, userController.login);
+api.post("/register", registerValidation(), validate, userController.register);
 
 module.exports = api;

@@ -1,4 +1,4 @@
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 function memoryFormat(data) {
   const heap = data / 1024 / 1024;
@@ -9,18 +9,23 @@ function checkDataType(data) {
   return Array.isArray(data) ? [...data] : { ...data };
 }
 
-function format(msg, data) {
+function startTime() {
+  return dayjs();
+}
+
+function jsonFormat(msg, data, time) {
   return {
     diagnostic: {
-      request_time: `${moment().format("YYYY-MM-DD hh:mm:ss")}`,
-      execution_time: `${moment().diff(moment(), "millisecond", true)} ms`,
-      memory_usage: `${memoryFormat(data)}`,
+      request_time: `${time().format("YYYY-MM-DD hh:mm:ss")}`,
+      execution_time: `${dayjs().diff(dayjs(time), "millisecond", true)} ms`,
+      memory_usage: `${memoryFormat(process.memoryUsage().heapUsed)}`,
       msg,
     },
-    data: checkDataType(data),
+    data: data !== null ? checkDataType(data) : null,
   };
 }
 
 module.exports = {
-  format,
+  jsonFormat,
+  startTime,
 };
